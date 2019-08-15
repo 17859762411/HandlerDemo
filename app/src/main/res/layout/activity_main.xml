@@ -23,13 +23,14 @@
         android:id="@+id/tv_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="5dp"
         android:text="@string/app_name" />
 
     <Button
         android:id="@+id/btn_jump_second"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="5dp"
+        android:layout_margin="5dp"
         android:background="@android:color/system_notification_accent_color"
         android:text="在子线程把需要在另一个线程执行的操作加入到消息队列中去\n实例：通过Handler + Message来实现子线程加载图片，在UI线程显示图片" />
 
@@ -37,8 +38,16 @@
         android:id="@+id/btn_jump_third"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="5dp"
+        android:layout_margin="5dp"
         android:background="@android:color/system_notification_accent_color"
         android:text="模拟使用HandlerThread同时下载A和B的Demo" />
+
+    <Button
+        android:id="@+id/btn_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:background="@android:color/system_notification_accent_color"
+        android:text="" />
 
 </LinearLayout>
