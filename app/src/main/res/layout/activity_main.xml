@@ -48,6 +48,6 @@
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:background="@android:color/system_notification_accent_color"
-        android:text="" />
+        android:text="测试dialog" />
 
 </LinearLayout>

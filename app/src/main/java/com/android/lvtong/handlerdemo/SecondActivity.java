@@ -1,7 +1,5 @@
 package com.android.lvtong.handlerdemo;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -18,6 +16,14 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.test.espresso.core.internal.deps.guava.util.concurrent.ThreadFactoryBuilder;
 
 /**
  * @author 22939
@@ -35,10 +41,14 @@ public class SecondActivity extends AppCompatActivity {
         btnLoad.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new Thread(new Runnable() {
+                ThreadFactory namedThreadFactory = new ThreadFactoryBuilder().setNameFormat("thread-call-runner-%d")
+                                                                             .build();
+                ExecutorService executorService =
+                        new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>(1024),
+                                               namedThreadFactory, new ThreadPoolExecutor.AbortPolicy());
+                executorService.execute(new Runnable() {
                     @Override
                     public void run() {
-                        // 在Runnable中进行网络读取操作，返回bitmap
                         final Bitmap bitmap = loadPicFromInternet();
                         // 在子线程中实例化Handler同样是可以的，只要在构造函数的参数中传入主线程的Looper即可
                         Handler handler = new Handler(Looper.getMainLooper());
@@ -51,7 +61,7 @@ public class SecondActivity extends AppCompatActivity {
                             }
                         });
                     }
-                }).start();
+                });
             }
         });
         Button btnReset = findViewById(R.id.btn_reset);
@@ -63,42 +73,44 @@ public class SecondActivity extends AppCompatActivity {
         });
         iv = findViewById(R.id.iv);
     }
+
     /***
      * HttpUrlConnection加载图片
-     * @return
+     * @return Bitmap
      */
     public Bitmap loadPicFromInternet() {
+
+        int respondCode1 = 200;
         Bitmap bitmap = null;
-        int respondCode = 0;
+        int respondCode;
         InputStream is = null;
         try {
-            URL
-                    url = new URL("https://www.baidu.com/img/bd_logo1.png");
+            URL url = new URL("https://www.baidu.com/img/bd_logo1.png");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             connection.setConnectTimeout(10 * 1000);
             connection.setReadTimeout(5 * 1000);
             connection.connect();
             respondCode = connection.getResponseCode();
-            if (respondCode == 200) {
+            if (respondCode == respondCode1) {
                 is = connection.getInputStream();
                 bitmap = BitmapFactory.decodeStream(is);
             }
         } catch (MalformedURLException e) {
-            Log.d("SecondActivity", "e:" + e);
-            Toast.makeText(getApplicationContext(), "访问失败", Toast.LENGTH_SHORT).show();
+            Log.d(getClass().getSimpleName(), "e:" + e);
+            Toast.makeText(getApplicationContext(), "访问失败", Toast.LENGTH_SHORT)
+                 .show();
         } catch (IOException e) {
-            Log.d("SecondActivity", "e:" + e);
+            Log.d(getClass().getSimpleName(), "e:" + e);
         } finally {
             if (is != null) {
                 try {
                     is.close();
                 } catch (IOException e) {
-                    Log.d("SecondActivity", "e:" + e);
+                    Log.d(getClass().getSimpleName(), "e:" + e);
                 }
             }
         }
         return bitmap;
     }
-
 }

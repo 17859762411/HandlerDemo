@@ -8,14 +8,19 @@
               tools:context=".ThirdActivity">
 
     <TextView
-        android:id="@+id/tv_a"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="tv_a"/>
+        android:text="模拟使用HandlerThread同时下载A和B的Demo" />
+
     <TextView
-        android:id="@+id/tv_b"
+        android:id="@+id/tv_first"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="tv_b"/>
+        android:text="tv_first" />
+    <TextView
+        android:id="@+id/tv_second"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="tv_first" />
 
 </LinearLayout>

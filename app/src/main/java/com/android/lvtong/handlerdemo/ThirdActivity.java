@@ -1,63 +1,64 @@
 package com.android.lvtong.handlerdemo;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 /**
  * @author 22939
  */
 public class ThirdActivity extends AppCompatActivity {
 
-    private TextView tvA;
-    private TextView tvB;
+    private TextView tvFirst;
+    private TextView tvSecond;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_third);
-        tvA = (TextView) findViewById(R.id.tv_a);
-        tvB = (TextView) findViewById(R.id.tv_b);
+        tvFirst = findViewById(R.id.tv_first);
+        tvSecond = findViewById(R.id.tv_second);
 
         final Handler mainHandler = new Handler();
 
-        final HandlerThread downloadAThread = new HandlerThread("downloadAThread");
-        downloadAThread.start();
-        Handler downloadAHandler = new Handler(downloadAThread.getLooper());
+        final HandlerThread downloadFirstThread = new HandlerThread("downloadFirstThread");
+        downloadFirstThread.start();
+        Handler downloadFirstHandler = new Handler(downloadFirstThread.getLooper());
 
         // 通过postDelayed模拟耗时操作
-        downloadAHandler.postDelayed(new Runnable() {
+        downloadFirstHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(getApplicationContext(), "下载A完成", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "下载1完成", Toast.LENGTH_SHORT)
+                     .show();
                 mainHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        tvA.setText("A任务已经下载完成");
+                        tvFirst.setText("任务1已经下载完成");
                     }
                 });
             }
         }, 1000 * 5);
 
-
-        final HandlerThread downloadBThread = new HandlerThread("downloadBThread");
-        downloadBThread.start();
-        Handler downloadBHandler = new Handler(downloadBThread.getLooper());
+        final HandlerThread downloadSecondThread = new HandlerThread("downloadSecondThread");
+        downloadSecondThread.start();
+        Handler downloadSecondHandler = new Handler(downloadSecondThread.getLooper());
 
         // 通过postDelayed模拟耗时操作
-        downloadBHandler.postDelayed(new Runnable() {
+        downloadSecondHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(getApplicationContext(), "下载B完成", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "下载2完成", Toast.LENGTH_SHORT)
+                     .show();
                 mainHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        tvB.setText("B任务已经下载完成");
+                        tvSecond.setText("任务2已经下载完成");
                     }
                 });
 

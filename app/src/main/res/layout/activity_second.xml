@@ -11,12 +11,12 @@
         android:id="@+id/btn_load"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="load" />
+        android:text="从网络获取" />
     <Button
         android:id="@+id/btn_reset"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="reset" />
+        android:text="重设" />
 
     <ImageView
         android:id="@+id/iv"
